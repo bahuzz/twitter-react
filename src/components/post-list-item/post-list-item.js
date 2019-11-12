@@ -2,31 +2,9 @@ import React, {Component} from 'react';
 import './post-list-item.scss';
 
 export default class PostListItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            important: false,
-            like: false
-        };
-        this.onImportant = this.onImportant.bind(this);
-        this.onLike = this.onLike.bind(this);
-    }
-
-    onImportant() {
-        this.setState(({important}) => ({
-            important: !important
-        }))
-    }
-
-    onLike() {
-        this.setState(({like}) => ({
-            like: !like
-        }))
-    }
 
     render() {
-        const {label,onDelete} = this.props;
-        const {important,like} = this.state;
+        const {label,onDelete,onToggleLiked,onToggleImportant,like,important} = this.props;
         let date = new Date();
         let day = date.getDate();
         let month = date.getMonth() + 1;
@@ -44,14 +22,14 @@ export default class PostListItem extends Component {
             <li className="list-group-item ">
                 <div className={classNames}>
                     <span
-                        onClick={this.onLike} 
+                        onClick={this.onToggleLiked} 
                         className="app-list-item-label">
                         {label}
                     </span>
                     <div className="d-flex justify-content-center align-items-center"> 
                         <button 
                             type="button"
-                            onClick={this.onImportant}
+                            onClick={this.onToggleImportant}
                             className="btn-star btn-sm">
                             <i className="fa fa-star"></i>
                         </button>

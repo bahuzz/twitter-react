@@ -37,7 +37,8 @@ class App extends Component {
         };
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
-        this.maxId = 5;
+        this.onToggleImportant = this.onToggleImportant.bind(this);
+        this.onToggleLiked = this.onToggleLiked.bind(this);
     }
 
     deleteItem(id) {
@@ -58,6 +59,17 @@ class App extends Component {
             return {data: arr}
         })
     }
+
+    onToggleImportant(id) {
+        console.log(`important ${id}`)
+    }
+
+    onToggleLiked(id) {
+        this.setState(({data}) => {
+            console.log(`liked ${id}`)
+        })
+        
+    }
     
     render() {
         return (
@@ -70,6 +82,8 @@ class App extends Component {
                 <PostList 
                     posts={this.state.data} 
                     onDelete={this.deleteItem}
+                    onToggleImportant={this.onToggleImportant}
+                    onToggleLiked={this.onToggleLiked}
                     />
                 <PostAddForm
                     onAdd = {this.addItem} />
