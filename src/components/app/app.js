@@ -38,9 +38,6 @@ class App extends Component {
         };
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
-        this.onToggleImportant = this.onToggleImportant.bind(this);
-        this.onToggleLiked = this.onToggleLiked.bind(this);
-        this.onToggleElement = this.onToggleElement.bind(this);
         this.onUpdateSearch = this.onUpdateSearch.bind(this);
         this.onFilterChange = this.onFilterChange.bind(this);
     }
@@ -67,19 +64,26 @@ class App extends Component {
     onFilterChange(filter) {
         this.setState({filter})
     }
+    
 
-    onToggleElement(id, element) {
+    onToggleElement = (id, element) => {
         this.setState(({data}) => {
             const index = data.findIndex(el => el.id === id);
-            return (data[index][element] = !data[index][element])
+            
+            const old = data[index];
+            const newItem = {...old, [element]: !old[element]};
+
+            const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+
+            return {data: newArr};
         })
     }
 
-    onToggleImportant(id) {
+    onToggleImportant = (id) => {
         this.onToggleElement(id, 'important')
     }
 
-    onToggleLiked(id) {
+    onToggleLiked = (id) => {
         this.onToggleElement(id, 'like')
     } 
 
