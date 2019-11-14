@@ -7,7 +7,6 @@ import PostAddForm from '../post-add-form/post-add-form';
 import nextId from "react-id-generator";
 import styled from 'styled-components';
 
-// import './app.css';
 
 
 const AppContainer = styled.div`
@@ -29,16 +28,21 @@ class App extends Component {
         super(props);
         this.state = {
             data: [
-                {label: "New post about something", important: false, id: 4 },
-                {label: "Going to learn React", important: true, id: 3 },
-                {label: "That is so good", important: false, id: 2},
-                {label: "I need a break...", important: false, id: 1}
-            ]
+                {label: "New post about something", important: false, like: false, id: 4 },
+                {label: "Going to learn React", important: true, like: false, id: 3 },
+                {label: "That is so good", important: false,like: false, id: 2},
+                {label: "I need a break...", important: false, like: false, id: 1}
+            ],
+            term: '',
+            filter: 'all'
         };
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
         this.onToggleImportant = this.onToggleImportant.bind(this);
         this.onToggleLiked = this.onToggleLiked.bind(this);
+        this.onToggleElement = this.onToggleElement.bind(this);
+        this.onUpdateSearch = this.onUpdateSearch.bind(this);
+        this.onFilterChange = this.onFilterChange.bind(this);
     }
 
     deleteItem(id) {
@@ -60,27 +64,72 @@ class App extends Component {
         })
     }
 
+    onFilterChange(filter) {
+        this.setState({filter})
+    }
+
+    onToggleElement(id, element) {
+        this.setState(({data}) => {
+            const index = data.findIndex(el => el.id === id);
+            return (data[index][element] = !data[index][element])
+        })
+    }
+
     onToggleImportant(id) {
-        console.log(`important ${id}`)
+        this.onToggleElement(id, 'important')
     }
 
     onToggleLiked(id) {
-        this.setState(({data}) => {
-            console.log(`liked ${id}`)
-        })
-        
+        this.onToggleElement(id, 'like')
+    } 
+
+    searchPost(items, term) {
+        if(term.length === 0) {
+            return items
+        }
+
+        return items.filter(item => {
+            return item.label.indexOf(term) > -1
+        });
+    }
+
+    filterPost(items, filter) {
+        if (filter === 'like') {
+            return items.filter(item => item.like)
+        } else {
+            return items
+        }
+    }
+
+    onUpdateSearch(term) {
+        this.setState({term});
     }
     
     render() {
+        const {data, term, filter} = this.state;
+
+        const liked = data.filter(item => item.like).length;
+        const allPosts = data.length;
+
+        const visiblePosts = this.filterPost(this.searchPost(data, term), filter);
+
         return (
             <AppContainer>
-                <AppHeader/>
+                <AppHeader
+                    allPosts={allPosts}
+                    liked={liked}
+                />
                 <SearchPanelContainer>
-                    <SearchPanel/>
-                    <PostStatusFilter/>
+                    <SearchPanel
+                        onUpdateSearch={this.onUpdateSearch}
+                    />
+                    <PostStatusFilter 
+                        filter={filter}
+                        onFilterChange={this.onFilterChange}
+                    />
                 </SearchPanelContainer>
                 <PostList 
-                    posts={this.state.data} 
+                    posts={visiblePosts} 
                     onDelete={this.deleteItem}
                     onToggleImportant={this.onToggleImportant}
                     onToggleLiked={this.onToggleLiked}

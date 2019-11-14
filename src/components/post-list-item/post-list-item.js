@@ -22,14 +22,14 @@ export default class PostListItem extends Component {
             <li className="list-group-item ">
                 <div className={classNames}>
                     <span
-                        onClick={this.onToggleLiked} 
+                        onClick={onToggleLiked} 
                         className="app-list-item-label">
                         {label}
                     </span>
                     <div className="d-flex justify-content-center align-items-center"> 
                         <button 
                             type="button"
-                            onClick={this.onToggleImportant}
+                            onClick={onToggleImportant}
                             className="btn-star btn-sm">
                             <i className="fa fa-star"></i>
                         </button>

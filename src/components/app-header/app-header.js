@@ -15,11 +15,11 @@ const AppHeaderWrapper = styled.div`
   }
 `;
 
-const AppHeader = () => {
+const AppHeader = ({liked,allPosts}) => {
     return(
         <AppHeaderWrapper>
             <h1>bahuzz</h1>
-            <h2>5 posts, liked 2</h2>
+    <h2>{allPosts} posts, liked {liked}</h2>
         </AppHeaderWrapper>
     )
 }
